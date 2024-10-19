@@ -24,6 +24,10 @@
                             <input type="text" class="form-control" ng-model="product.congDung" required>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label">Hướng dẫn sử dụng:</label>
+                            <input type="text" class="form-control" ng-model="product.hdsd" required>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Tuổi tối thiểu:</label>
                             <input type="number" class="form-control" ng-model="product.tuoiMin" required>
                             <label class="form-label">Tuổi tối đa:</label>
@@ -57,6 +61,7 @@
                     <th>Tên</th>
                     <th>Thành phần</th>
                     <th>Công dụng</th>
+                    <th>Hướng dẫn sử dụng</th>
                     <th>Tuổi tối thiểu</th>
                     <th>Tuổi tối đa</th>
                     <th>Tổng số lượng</th>
@@ -77,6 +82,7 @@
                         <td>{{sp.tenSP}}</td>
                         <td>{{sp.thanhPhan}}</td>
                         <td>{{sp.congDung}}</td>
+                        <td>{{sp.hdsd}}</td>
                         <td>{{sp.tuoiMin}} tuổi</td>
                         <td>{{sp.tuoiMax}} tuổi</td>
                         <td>{{sp.tongSoLuong}}</td>
@@ -88,9 +94,9 @@
                         <td>{{sp.ngaySua | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                     
                         <td>
-                            <a href="http://127.0.0.1:5500/Ban_tai_quay/View/ChiTietSanPham.html" class="btn" style="background-color: #3498db; color: white;">
-                                <i class="fa fa-list" ></i>
-                            </a>             
+                            <a ng-href="#!/chitietsanpham/{{sp.id}}" class="btn" style="background-color: #3498db; color: white;">
+                                <i class="fa fa-list"></i>
+                            </a>    
                             <button class="btn btn-success" ng-click="viewDetail(sp.id)" data-bs-toggle="modal" data-bs-target="#readData">
                                 <i class="bi bi-eye"></i>
                               </button>
@@ -109,6 +115,7 @@
                                                     <p><strong>Tên:</strong> {{ productDetail.tenSP }} </p>
                                                     <p><strong>Thành phần:</strong> {{ productDetail.thanhPhan }}</p>
                                                     <p><strong>Công dụng:</strong> {{ productDetail.congDung }}</p>
+                                                    <p><strong>Hướng dẫn sử dụng:</strong> {{ productDetail.hdsd }}</p>
                                                     <p><strong>Tuổi tối thiểu:</strong> {{ productDetail.tuoiMin  }} tuổi</p>
                                                     <p><strong>Tuôi tối đa:</strong> {{ productDetail.tuoiMax }} tuổi</p>
                                                     <p><strong>Số lượng:</strong> {{ productDetail.tongSoLuong }}</p>
@@ -139,7 +146,64 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-primary" ng-click="viewDetail(sp.id)" data-bs-toggle="modal" data-bs-target="#userForm"><i class="bi bi-pencil-square"></i></button>
+                            <button class="btn btn-primary" ng-click="viewDetail(sp.id)" data-bs-toggle="modal" data-bs-target="#userForm">
+                                <i class="bi bi-pencil-square">
+
+                                </i></button>
+                            <div class="modal fade" id="userForm" tabindex="-1" aria-labelledby="userFormLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="userFormLabel">Chi tiết sản phẩm</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form ng-submit="updateProduct(); clearForm()">
+                                                <!-- Thêm trường ID ẩn -->
+                                                <input type="hidden" ng-model="productDetail.id" required>
+                                                
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tên sản phẩm:</label>
+                                                    <input type="text" class="form-control" ng-model="productDetail.tenSP" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Thành phần:</label>
+                                                    <input type="text" class="form-control" ng-model="productDetail.thanhPhan" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Công dụng:</label>
+                                                    <input type="text" class="form-control" ng-model="productDetail.congDung" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Hướng dẫn sử dụng:</label>
+                                                    <input type="text" class="form-control" ng-model="productDetail.hdsd" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tuổi tối thiểu:</label>
+                                                    <input type="number" class="form-control" ng-model="productDetail.tuoiMin" required>
+                                                    <label class="form-label">Tuổi tối đa:</label>
+                                                    <input type="number" class="form-control" ng-model="productDetail.tuoiMax" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Danh mục:</label>
+                                                  <select class="form-control" ng-model="productDetail.idDanhMuc" required>
+                                                    <option value="" disabled selected>Vui lòng chọn danh mục</option>
+                                                    <option ng-repeat="danhMuc in listDanhMuc" value="{{danhMuc.id}}">{{danhMuc.ten}}</option>
+                                                </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Mô tả:</label>
+                                                    <input type="tel" class="form-control" ng-model="productDetail.moTa" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-outline-success">Cập Nhật</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <button class="btn btn-danger" ng-click="deleteProduct(sp.id)">
                                 <i class="bi bi-trash"></i>
                             </button>                                   

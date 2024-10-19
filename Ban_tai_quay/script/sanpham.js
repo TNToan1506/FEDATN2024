@@ -65,6 +65,7 @@ window.sanPhamCtrl= function($scope, $http) {
             formData.append('congDung', product.congDung || '');
             formData.append('tuoiMin', product.tuoiMin || 0);
             formData.append('tuoiMax', product.tuoiMax || 0);
+            formData.append('hdsd', product.hdsd);
             formData.append('moTa', product.moTa || '');
             formData.append('idDanhMuc', product.idDanhMuc || '');
             formData.append('trangThai', 1);
@@ -119,68 +120,41 @@ window.sanPhamCtrl= function($scope, $http) {
    
     $scope.updateProduct = function() {
         const formData = new FormData();
-        // Thêm thông tin sản phẩm vào FormData
-        formData.append('id', $scope.productDetail.id); // Lưu ID của sản phẩm
-        formData.append('gia', $scope.productDetail.gia);
-        formData.append('soNgaySuDung', $scope.productDetail.soNgaySuDung);
+        formData.append('id', $scope.productDetail.id || '');
+        formData.append('tenSP', $scope.productDetail.tenSP || '');
+        formData.append('thanhPhan', $scope.productDetail.thanhPhan || '');
+        formData.append('congDung', $scope.productDetail.congDung || '');
+        formData.append('tuoiMin', $scope.productDetail.tuoiMin || 0);
+        formData.append('tuoiMax', $scope.productDetail.tuoiMax || 0);
         formData.append('hdsd', $scope.productDetail.hdsd);
-        formData.append('ngaySanXuat', moment($scope.productDetail.ngaySanXuat).format('YYYY-MM-DDTHH:mm:ss'));
-        formData.append('hsd', moment($scope.productDetail.hanSuDung).format('YYYY-MM-DDTHH:mm:ss'));
-        formData.append('ngayNhap', moment($scope.productDetail.ngayNhap).format('YYYY-MM-DDTHH:mm:ss'));
-        formData.append('soLuong', $scope.productDetail.soLuong);
-        formData.append('trangThai', $scope.productDetail.trangThai);
-        
-        // Gửi danh sách linkAnhList
-        if ($scope.productDetail.linkAnhList) {
-            $scope.productDetail.linkAnhList.forEach(function(link) {
-                formData.append('linkAnhList', link); // Thêm đường dẫn vào FormData
-            });
-        }
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
+        formData.append('moTa', $scope.productDetail.moTa || '');
+        formData.append('idDanhMuc',  $scope.productDetail.idDanhMuc || '');
+        formData.append('trangThai', 1);
+        formData.append('idThuongHieu', "95B16137");
+    
         // Gửi FormData lên server
-        $http.put('http://localhost:8083/chi-tiet-san-pham/update', formData, {
+        $http.put('http://localhost:8083/san-pham/update', formData, {
             transformRequest: angular.identity,
             headers: {
-                'Content-Type': 'application/json' // Đặt Content-Type thành application/json
-            }    
-            })
+                'Content-Type': undefined // Cho phép browser tự động thiết lập boundary
+            }
+        })
         .then(function(response) {
-            console.log('Cập nhật sản phẩm thành công: ', response.data);
-            // Cập nhật lại danh sách sản phẩm
             $scope.getAllProducts(); // Tải lại danh sách sản phẩm
-            $('#productModal').modal('hide'); // Đóng modal sau khi cập nhật
-            alert('Cập nhật thành công!'); // Thông báo thành công
+            $('#userForm').modal('hide'); // Đóng modal sau khi cập nhật
+            alert('Cập nhật thành công!');
         })
         .catch(function(error) {
-            // console.log(productDetail);
-            console.error('Lỗi khi cập nhật sản phẩm: ', error.data.message);
-            if (error.data && error.data.message) {
-                console.log(productDetail);
-                $scope.errorMessage = 'Lỗi khi cập nhật sản phẩm: ' + error.data.message;
-            } else {
-                $scope.errorMessage = 'Lỗi không xác định: ' + JSON.stringify(error);
-            }
+            $scope.getAllProducts(); // Tải lại danh sách sản phẩm
+            $scope.errorMessage = error.data && error.data.message ? 'Lỗi khi cập nhật sản phẩm: ' + error.data.message : 'Lỗi không xác định: ' + JSON.stringify(error);
         });
     };
-$scope.clearForm = function() {
-    // Xóa mọi dữ liệu trong product
-    $scope.product = {
-        gia: '',
-        soNgaySuDung: '',
-        huongDanSuDung: '',
-        ngaySanXuat: '',
-        hanSuDung: '',
-        ngayNhap: '',
-        soLuong: '',
-        trangThai: 1
-       // Nếu bạn có thuộc tính này cho hình ảnh đã chọn
+    $scope.clearForm = function() {
+        $scope.productDetail = {}; // Xóa dữ liệu chi tiết sản phẩm
+        $scope.product={};
+        $('#userForm').modal('hide'); // Đóng modal
+        $('#productModal').modal('hide'); // Đóng modal
     };
-    
-    // Đóng modal
-    $('#productModal').modal('hide');
-};
     // Xem chi tiết sản phẩm
     $scope.viewDetail = function(productId) {
         const product = $scope.products.find(function(p) {
@@ -191,14 +165,8 @@ $scope.clearForm = function() {
             // Chuyển đổi các trường số thành kiểu số
             $scope.productDetail = {
                 ...product,
-                soNgaySuDung: Number(product.soNgaySuDung),
-                soLuong: Number(product.soLuong), // Đảm bảo là số
-                // Chuyển đổi các trường khác nếu cần
-                ngaySanXuat: new Date(product.ngaySanXuat),
-                hsd: new Date(product.hsd),
-                ngayNhap: new Date(product.ngayNhap)
             };
-            $('#readData').modal('show');
+            // $('#readData').modal('show');
         } else {
             console.error('Không tìm thấy sản phẩm với ID:', productId);
         }

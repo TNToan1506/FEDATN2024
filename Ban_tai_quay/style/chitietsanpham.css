@@ -1,0 +1,25 @@
+.image-wrapper {
+    position: relative; /* Đặt vị trí tương đối cho div chứa hình ảnh */
+    display: inline-block; /* Để các hình ảnh hiển thị cạnh nhau */
+}
+
+.product-image {
+    width: 100px; /* Hoặc chiều rộng mong muốn */
+    height: 100px; /* Hoặc chiều cao mong muốn */
+    object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng */
+}
+
+.remove-button {
+    position: absolute; /* Đặt nút xóa ở vị trí tuyệt đối */
+    top: 5px; /* Đặt nút ở phía trên cùng */
+    right: 5px; /* Đặt nút ở phía bên phải */
+    padding: 0; /* Loại bỏ padding */
+    width: 20px; /* Kích thước nút */
+    height: 20px; /* Kích thước nút */
+    border-radius: 50%; /* Làm cho nút thành hình tròn */
+    background-color: red; /* Màu nền cho nút */
+    color: white; /* Màu chữ cho nút */
+    border: none; /* Loại bỏ viền của nút */
+    font-size: 14px; /* Kích thước chữ */
+    z-index: 1; /* Đảm bảo nút ở trên cùng */
+}

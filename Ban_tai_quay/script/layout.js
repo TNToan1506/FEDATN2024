@@ -6,10 +6,10 @@ app.config(function ($routeProvider) {
             templateUrl: 'view/sanpham.html',
             controller: sanPhamCtrl
         })
-        // .when('/giamgia', {
-        //     templateUrl: 'view/giamgia.html',
-        //     controller: giamgiaCtrl
-        // })
+        .when('/chitietsanpham/:idSP', {
+            templateUrl: 'view/chitietsanpham.html',
+            controller: chiTietSanPhamCtrl
+        })
         // .when('/banhang', {
         //     templateUrl: 'view/banhang.html',
         //     controller: banhangCtrl
